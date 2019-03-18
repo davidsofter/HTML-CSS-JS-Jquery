@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>two input</title>
+     <link rel="stylesheet" href=" ../css/bootstrap.min.css">
+    <script src="../jquery-3.3.1.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .addbg{
+            background:#87A900;
+        }
+        p.item{
+            height: 20px;
+            /*border: 1px solid red;*/
+            overflow: hidden;
+        }
+        .div_content1{
+            width: 150px;
+            height: 100px;
+            margin: 0 0 0 36px;
+            border:solid #87A900 2px;
+            border-top:0;
+            display:none;
+            position: absolute;
+            overflow: auto;
+        }
+        .div_content2{
+            width: 250px;
+            height: 100px;
+            margin:0 0 0 232px;
+            border:solid #87A900 2px;
+            border-top:0;
+            display:none;
+            position: absolute;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div class="div1" style="display: inline-block;vertical-align: top">
+        <div class="form-inline">
+            <label class="text-success">主类</label>
+            <input class="input1 form-control" style="width: 150px" onKeyup="KeyupEvent(event,this)">
+            <div class="div_content1"></div>
+        </div>
+    </div>
+    <div class="div2" style='display:inline-block;vertical-align: center;'>
+        <div class="form-inline">
+            <label type="text" class="text-success">从类</label>
+            <input class="input2 form-control" style="width: 250px" onKeyup="KeyupEvent(event,this)">
+        </div>
+
+
+    </div>
+    <div class="div_content2"></div>
+</div>
+<script>
+var data=[
+    'abc',
+    'acc',
+    'awe',
+    'zxc',
+    'qwe'
+]
+function getContent(obj) {
+    var input1 = $.trim($(obj).val());
+    if (input1 == "") {
+        $(".div_content1").hide().html("");
+        return false;
+    }
+    var html = "";
+    for (var i = 0; i < data.length; i++) {
+        //indexof返回被选元素在字符串中首次出现的位置，没有则返回-1
+        //onmouseenter表示鼠标移到元素上时触发指定事件
+        if (data[i].indexOf(input1) >= 0) {
+            html = html + "<div><input type='checkbox' style='display: inline-block'><p class='item' onmouseenter='getFocus(this)' onClick='getCon(this);' style='display: inline-block;'>" + data[i] + "</p></div>"
+        }
+    }
+    if (html != "") {
+        $(".div_content1").show().html(html);
+    } else {
+        $(".div_content1").hide().html("");
+    }
+}
+function getFocus(obj){
+
+    $(".item").removeClass("addbg");
+
+    $(obj).addClass("addbg");
+
+}
+function getCon(obj){
+
+    var value = $(obj).text();
+
+    $(obj).parent().parent().parent().append("<div><label>从类</label><input type='text' style='width: 250px;'></div>")
+     // $(obj).parent().parent().find("div").eq(1).find("input").val()
+    $(".input1").val(value);
+
+    $(".div_content1").hide().html("");
+
+}
+
+function KeyupEvent(e,obj) {
+        if(e.keyCode=='81'&&e.ctrlKey){
+            //ctrl+q
+            getContent(obj)
+        }
+        else if(e.keyCode=='66'&&e.ctrlKey){
+
+            //ctrl+b
+            getContent2(obj)
+        }
+
+}
+function getContent2(obj) {
+    var input2 = $.trim($(obj).val());
+    if (input2 == "") {
+        $(".div_content2").hide().html("");
+        return false;
+    }
+    var html = "";
+    for (var i = 0; i < data.length; i++) {
+        //indexof返回被选元素在字符串中首次出现的位置，没有则返回-1
+        //onmouseenter表示鼠标移到元素上时触发指定事件
+        if (data[i].indexOf(input2) >= 0) {
+            html = html + "<div><input type='checkbox' style='display: inline-block'><p class='item' onmouseenter='getFocus(this)' onClick='getCon2(this);' style='display: inline-block;'>" + data[i] + "</p></div>"
+        }
+    }
+    if (html != "") {
+        $(".div_content2").show().html(html);
+    } else {
+        $(".div_content2").hide().html("");
+    }
+}
+
+function getCon2(obj){
+
+    var value;
+
+    checkbox2_length=$(".div_content2").find("input:checked").length
+
+    if(checkbox2_length==0){
+        $(".input2").eq(0).val($(obj).text());
+    }
+    for(i=0;i<checkbox2_length;i++){
+
+        if(i==0){
+            $(".input2").eq(0).val($(".div_content2").find("input:checked").eq(i).siblings(".item").text());
+        }else{
+            $(".div2").append("<div class='form-inline'><label type=\"text\" class=\"text-success\">从类</label> <input class='input2 form-control' style='width: 250px;' onKeyup='KeyupEvent(event,this)'></div>")
+
+        value=$(".div_content2").find("input:checked").eq(i).siblings(".item").text()
+        $(".input2").eq(i).val(value);
+        }
+
+    }
+
+
+    $(".div_content2").hide().html("");
+
+}
+
+</script>
+</body>
+</html>
